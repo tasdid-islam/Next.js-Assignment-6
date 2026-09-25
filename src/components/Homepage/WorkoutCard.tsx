@@ -8,43 +8,43 @@ interface WorkoutCardProps {
 
 const WorkoutCard = ({ workout }: WorkoutCardProps) => {
   return (
-    <Link href={`/workout/${workout.id}`}>
-      <article className="overflow-hidden border border-[#262626] bg-[#151515] transition hover:border-[#C2F800]">
-        {/* Image */}
-        <div className="relative h-[240px]">
+    <Link href={`/workout/${workout.id}`} className="group block">
+     <article className="overflow-hidden rounded-4xl border border-[#262626] bg-[#151515] transition-all duration-300 hover:-translate-y-1 hover:border-[#C2F800]">
+        
+        <div className="relative h-[240px] overflow-hidden">
           <Image
             src={workout.image}
             alt={workout.name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
 
-        {/* Content */}
         <div className="p-5">
-          {/* Muscle Groups */}
+
+        
           <div className="mb-4 flex flex-wrap gap-2">
             {workout.muscleGroups.map((muscle) => (
               <span
                 key={muscle}
-                className="bg-[#C2F800] px-3 py-1 text-xs font-bold uppercase text-black"
+               className="rounded-xl bg-[#C2F800] px-3 py-1 text-xs font-bold uppercase text-black"
               >
                 {muscle}
               </span>
             ))}
           </div>
 
-          {/* Name */}
-          <h3 className="mb-2 text-xl font-bold uppercase text-white">
+          
+          <h3 className="mb-2 text-xl font-bold uppercase text-white transition-colors duration-300 group-hover:text-[#C2F800]">
             {workout.name}
           </h3>
 
-          {/* Equipment */}
+    
           <p className="mb-5 text-sm text-gray-400">
             {workout.equipment}
           </p>
 
-          {/* Workout Info */}
+    
           <div className="flex items-center justify-between border-t border-[#262626] pt-4 text-sm text-gray-300">
             <span>⏱ {workout.duration} min</span>
 
@@ -52,6 +52,7 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
 
             <span>★ {workout.rating}</span>
           </div>
+
         </div>
       </article>
     </Link>

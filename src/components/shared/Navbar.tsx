@@ -5,9 +5,9 @@ import logo from "@/assets/logo.png";
 const Navbar = () => {
   return (
     <div className="navbar sticky top-0 z-50 border-b border-[#262626] bg-black text-white">
-      {/* Left Side */}
+      
       <div className="navbar-start">
-        {/* Mobile Menu */}
+        
         <div className="dropdown">
           <div
             tabIndex={0}
@@ -49,7 +49,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Logo + Brand Name */}
+    
         <div className="flex items-center gap-2">
           <Image
             src={logo}
@@ -64,7 +64,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Center Menu */}
+      
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
@@ -81,14 +81,14 @@ const Navbar = () => {
         </ul>
       </div>
 
-      {/* Right Side */}
+    
       <div className="navbar-end gap-2">
-        {/* Plan */}
+        
         <a className="btn rounded-full bg-[#C2F800] text-black hover:bg-[#C2F800]">
           Plan <span>0</span>
         </a>
 
-        {/* Saved */}
+      
         <a className="btn rounded-full border border-[#C2F800] bg-transparent text-white hover:bg-[#C2F800] hover:text-black">
           Saved <span>0</span>
         </a>

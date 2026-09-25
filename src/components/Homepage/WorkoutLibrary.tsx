@@ -61,21 +61,21 @@ const WorkoutLibrary = () => {
   }
 
   return (
-    <section className="px-6 py-10">
-      <div className="mx-auto max-w-7xl">
+    <section className="px-6 py-16">
+      <div className="w-full">
 
         <div className="mb-8">
-          <p className="mb-2 text-sm font-bold uppercase tracking-widest text-[#C2F800]">
-            Workout Library
-          </p>
-
-          <h2 className="text-3xl font-bold uppercase text-white md:text-4xl">
-            Find Your Workout
+          <h2  className=" text-4xl font-bold leading-tight md:text-5xl lg:text-6xl ">
+            THE LIBRARY
           </h2>
+
+          <p className="text-lg text-gray-300">
+            Twelve lifts covering every major muscle group.
+          </p>
         </div>
 
-        {/* 3 Cards Per Row */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workouts.map((workout) => (
             <WorkoutCard
               key={workout.id}

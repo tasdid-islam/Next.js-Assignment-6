@@ -7,7 +7,7 @@ const Banner = () => {
     <section className="m-4 rounded-xl border border-gray-700 p-8 md:m-8 md:p-12 bg-[#15171D]">
       <div className="container mx-auto grid grid-cols-1 items-center gap-10 md:grid-cols-2">
 
-        {/* Left Content */}
+        
         <div>
           <p className="mb-4 text-sm font-semibold tracking-[0.3em] text-[#C2F800] ">
             WORKOUT LIBRARY
@@ -32,7 +32,7 @@ const Banner = () => {
 
         </div>
 
-        {/* Right Image */}
+        
         <div className="flex justify-center md:justify-end">
           <Image
             src={banner}
