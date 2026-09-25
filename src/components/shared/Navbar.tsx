@@ -1,40 +1,101 @@
 
 import Image from "next/image";
 import logo from "@/assets/logo.png";
-const  Navbar= () => {
-  return (
-<div className="navbar bg-base-100 shadow-sm">
-  <div className="navbar-start">
-    <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        <svg aria-label="Menu" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
-      </div>
-      <ul
-        tabIndex={-1}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-           <li><a>Workouts</a></li>
-        
-    <li><a>My Plan</a></li>
-      </ul>
-    </div>
-  <Image src={logo} alt="Logo" />
-    <a className="btn btn-ghost text-xl">FITLOGO</a>
-    
-  </div>
-  <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
-      <li><a>Workouts</a></li>
-      
-      <li><a>My Plan</a></li>
-    </ul>
-  </div>
-  <div className="navbar-end">
-    <a className="btn">plan</a>
-    <a className="btn">Saved</a>
-  </div>
-</div>
 
+const Navbar = () => {
+  return (
+    <div className="navbar sticky top-0 z-50 border-b border-[#262626] bg-black text-white">
+      {/* Left Side */}
+      <div className="navbar-start">
+        {/* Mobile Menu */}
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost text-white lg:hidden"
+          >
+            <svg
+              aria-label="Menu"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </div>
+
+          <ul
+            tabIndex={-1}
+            className="menu menu-sm dropdown-content z-10 mt-3 w-52 rounded-box border border-[#262626] bg-black p-2 shadow"
+          >
+            <li>
+              <a className="text-white hover:text-[#C2F800]">
+                Workouts
+              </a>
+            </li>
+
+            <li>
+              <a className="text-white hover:text-[#C2F800]">
+                My Plan
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Logo + Brand Name */}
+        <div className="flex items-center gap-2">
+          <Image
+            src={logo}
+            alt="FitLog Logo"
+            width={40}
+            height={40}
+          />
+
+          <span className="text-xl font-bold text-white">
+            FITLOG
+          </span>
+        </div>
+      </div>
+
+      {/* Center Menu */}
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          <li>
+            <a className="text-white hover:text-[#C2F800]">
+              Workouts
+            </a>
+          </li>
+
+          <li>
+            <a className="text-white hover:text-[#C2F800]">
+              My Plan
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Right Side */}
+      <div className="navbar-end gap-2">
+        {/* Plan */}
+        <a className="btn rounded-full bg-[#C2F800] text-black hover:bg-[#C2F800]">
+          Plan <span>0</span>
+        </a>
+
+        {/* Saved */}
+        <a className="btn rounded-full border border-[#C2F800] bg-transparent text-white hover:bg-[#C2F800] hover:text-black">
+          Saved <span>0</span>
+        </a>
+      </div>
+    </div>
   );
 };
 
 export default Navbar;
+
