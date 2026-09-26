@@ -1,17 +1,24 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import logo from "@/assets/logo.png";
 import { useFitLog } from "@/context/FitLogContext";
 
 const Navbar = () => {
   const { plan, saved } = useFitLog();
 
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
+  const isMyPlan = pathname === "/my-plan";
+
   return (
     <div className="navbar sticky top-0 z-50 border-b border-[#262626] bg-black text-white">
+      
       <div className="navbar-start">
+        
         <div className="dropdown">
           <div
             tabIndex={0}
@@ -35,6 +42,7 @@ const Navbar = () => {
             </svg>
           </div>
 
+          
           <ul
             tabIndex={-1}
             className="menu menu-sm dropdown-content z-10 mt-3 w-52 rounded-box border border-[#262626] bg-black p-2 shadow"
@@ -42,7 +50,9 @@ const Navbar = () => {
             <li>
               <Link
                 href="/"
-                className="text-white hover:text-[#C2F800]"
+                className={`${
+                  isHome ? "text-[#C2F800]" : "text-white"
+                } hover:text-[#C2F800]`}
               >
                 Workouts
               </Link>
@@ -51,7 +61,9 @@ const Navbar = () => {
             <li>
               <Link
                 href="/my-plan"
-                className="text-white hover:text-[#C2F800]"
+                className={`${
+                  isMyPlan ? "text-[#C2F800]" : "text-white"
+                } hover:text-[#C2F800]`}
               >
                 My Plan
               </Link>
@@ -59,6 +71,7 @@ const Navbar = () => {
           </ul>
         </div>
 
+        
         <Link href="/" className="flex items-center gap-2">
           <Image
             src={logo}
@@ -73,12 +86,15 @@ const Navbar = () => {
         </Link>
       </div>
 
+      
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link
               href="/"
-              className="text-white hover:text-[#C2F800]"
+              className={`${
+                isHome ? "text-[#C2F800]" : "text-white"
+              } hover:text-[#C2F800]`}
             >
               Workouts
             </Link>
@@ -87,7 +103,9 @@ const Navbar = () => {
           <li>
             <Link
               href="/my-plan"
-              className="text-white hover:text-[#C2F800]"
+              className={`${
+                isMyPlan ? "text-[#C2F800]" : "text-white"
+              } hover:text-[#C2F800]`}
             >
               My Plan
             </Link>
@@ -95,7 +113,9 @@ const Navbar = () => {
         </ul>
       </div>
 
+  
       <div className="navbar-end gap-2">
+        
         <Link
           href="/my-plan"
           className="btn rounded-full bg-[#C2F800] text-black hover:bg-[#C2F800]"
@@ -103,6 +123,7 @@ const Navbar = () => {
           Plan <span>{plan.length}</span>
         </Link>
 
+        
         <Link
           href="/my-plan"
           className="btn rounded-full border border-[#C2F800] bg-transparent text-white hover:bg-[#C2F800] hover:text-black"
@@ -115,4 +136,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

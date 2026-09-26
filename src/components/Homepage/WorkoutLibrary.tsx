@@ -42,17 +42,24 @@ const WorkoutLibrary = () => {
 
   if (loading) {
     return (
-      <section className="px-6 py-10">
-        <p className="text-center text-gray-400">
-          Loading workouts...
-        </p>
+      <section
+        id="library"
+        className="flex min-h-[300px] items-center justify-center px-6 py-16"
+      >
+        <div className="flex flex-col items-center gap-4">
+          <span className="h-10 w-10 animate-spin rounded-full border-4 border-[#262626] border-t-[#C2F800]" />
+
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-400">
+            Loading workouts...
+          </p>
+        </div>
       </section>
     );
   }
 
   if (error) {
     return (
-      <section className="px-6 py-10">
+      <section id="library" className="px-6 py-10">
         <p className="text-center text-red-500">
           {error}
         </p>
@@ -61,11 +68,10 @@ const WorkoutLibrary = () => {
   }
 
   return (
-    <section className="px-6 py-16">
+    <section id="library" className="px-6 py-16">
       <div className="w-full">
-
         <div className="mb-8">
-          <h2  className=" text-4xl font-bold leading-tight md:text-5xl lg:text-6xl ">
+          <h2 className="text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
             THE LIBRARY
           </h2>
 
@@ -74,8 +80,7 @@ const WorkoutLibrary = () => {
           </p>
         </div>
 
-        
-      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workouts.map((workout) => (
             <WorkoutCard
               key={workout.id}
@@ -83,7 +88,6 @@ const WorkoutLibrary = () => {
             />
           ))}
         </div>
-
       </div>
     </section>
   );
