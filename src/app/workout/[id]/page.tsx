@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Workout } from "@/types/workout";
+import WorkoutActions from "@/components/workout/WorkoutActions";
 
 interface WorkoutDetailsPageProps {
   params: Promise<{
@@ -62,143 +63,136 @@ const WorkoutDetailsPage = async ({
     },
     {
       label: "Rating",
-      value: `★ ${workout.rating}`,
+      value: `${workout.rating}`,
       rating: true,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-8 text-white">
+    <main className="min-h-screen bg-[#0d0f13] text-white">
 
       
-      <div className="mb-8">
-  <Link
-    href="/"
-    className="inline-flex items-center rounded-lg border border-[#262626] bg-[#151515] px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-gray-300 transition-all duration-300 hover:-translate-y-1 hover:border-[#C2F800] hover:text-[#C2F800]"
-  >
-    ← Back to Workouts
-  </Link>
-</div>
+      <div className="px-5 pt-6">
+        <Link
+          href="/"
+          className="inline-flex items-center rounded-md border border-[#262626] bg-[#151515] px-4 py-2 text-[10px] font-bold uppercase tracking-wide text-gray-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C2F800] hover:text-[#C2F800]"
+        >
+          ← Back to Home
+        </Link>
+      </div>
 
 
       
-      <section className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <section className="mx-[2px] mt-5 px-4 py-8 md:px-4">
 
-        
-        <div className="relative h-[725px] overflow-hidden rounded-xl">
-          <Image
-            src={workout.image}
-            alt={workout.name}
-            fill
-            priority
-            className="object-cover"
-          />
-        </div>
-
-
-        
-        <div>
+        <div className="grid gap-9 lg:grid-cols-[0.98fr_1fr]">
 
           
-          <h1 className="text-4xl font-black uppercase leading-tight md:text-5xl">
-            {workout.name}
-          </h1>
+         <div className="relative h-[550px] overflow-hidden rounded-2xl md:h-[580px]">
 
+            <Image
+              src={workout.image}
+              alt={workout.name}
+              fill
+              priority
+              className="object-cover"
+            />
 
-          
-          <p className="mt-5 max-w-2xl text-base leading-7 text-gray-400">
-            {workout.description}
-          </p>
-
-
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {workout.muscleGroups.map((muscle) => (
-              <span
-                key={muscle}
-                className="rounded-md bg-[#C2F800] px-3 py-1.5 text-xs font-bold uppercase text-black"
-              >
-                {muscle}
-              </span>
-            ))}
           </div>
 
+        
+          <div className="flex flex-col">
 
           
-          <div className="mt-8 overflow-hidden rounded-lg">
+            <h1 className="text-3xl font-black uppercase leading-none tracking-tight md:text-4xl">
+              {workout.name}
+            </h1>
 
-            {workoutInfo.map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                className="group flex w-full items-center justify-between border-b border-[#262626] bg-[#151515] px-5 py-4 text-left transition-all duration-300 first:border-t hover:-translate-y-1 hover:bg-[#1b1b1b] hover:border-[#C2F800]"
-              >
-                <span className="text-xs font-bold uppercase tracking-wider text-gray-500 transition-colors duration-300 group-hover:text-[#C2F800]">
-                  {item.label}
-                </span>
 
+            
+            <p className="mt-3 max-w-2xl text-xs leading-5 text-gray-400 md:text-sm">
+              {workout.description}
+            </p>
+
+
+            
+            <div className="mt-4 flex flex-wrap gap-2">
+
+              {workout.muscleGroups.map((muscle) => (
                 <span
-                  className={`text-sm font-semibold ${
-                    item.rating
-                      ? "text-[#C2F800]"
-                      : "text-white"
-                  }`}
+                  key={muscle}
+                  className="rounded-full bg-[#C2F800] px-3 py-1 text-[9px] font-black uppercase text-black"
                 >
-                  {item.value}
+                  {muscle}
                 </span>
-              </button>
-            ))}
-
-          </div>
-
-
-          
-          <section className="mt-12">
-
-            <h2 className="text-3xl font-black uppercase">
-              Instructions
-            </h2>
-
-            <div className="mt-6 space-y-4">
-
-              {workout.instructions.map(
-                (instruction, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-4"
-                  >
-                    <span className="shrink-0 text-sm font-bold text-[#C2F800]">
-                      {String(index + 1).padStart(2, "0")}.
-                    </span>
-
-                    <p className="text-sm leading-6 text-gray-300">
-                      {instruction}
-                    </p>
-                  </div>
-                )
-              )}
+              ))}
 
             </div>
 
-          </section>
+
+            
+            <div className="mt-5 overflow-hidden rounded-xl border border-[#262626]">
+
+              {workoutInfo.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  className="group flex w-full items-center justify-between border-b border-[#262626] bg-[#1E2330] px-4 py-3 text-left transition-all duration-300 last:border-b-0 hover:bg-[#252b3a]"
+                >
+
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors duration-300 group-hover:text-[#C2F800]">
+                    {item.label}
+                  </span>
+
+                  <span
+                    className={`text-[10px] font-medium ${
+                      item.rating
+                        ? "text-[#C2F800]"
+                        : "text-white"
+                    }`}
+                  >
+                    {item.value}
+                  </span>
+
+                </button>
+              ))}
+
+            </div>
 
 
-          
-          <div className="mt-10 grid gap-3 sm:grid-cols-2">
+            
+            <section className="mt-5">
 
-            <button
-              type="button"
-              className="rounded-lg border border-[#262626] bg-[#151515] px-5 py-4 text-sm font-bold uppercase transition-all duration-300 hover:-translate-y-1 hover:border-[#C2F800] hover:text-[#C2F800]"
-            >
-              ＋ Add to Today's Plan
-            </button>
+              <h2 className="text-sm font-black uppercase tracking-wide">
+                Instructions
+              </h2>
 
-            <button
-              type="button"
-              className="rounded-lg border border-[#262626] bg-[#151515] px-5 py-4 text-sm font-bold uppercase transition-all duration-300 hover:-translate-y-1 hover:border-[#C2F800] hover:text-[#C2F800]"
-            >
-              🔖 Save for Later
-            </button>
+              <div className="mt-3 space-y-2.5">
+
+                {workout.instructions.map(
+                  (instruction, index) => (
+                   <div
+  key={index}
+  className="flex items-start gap-3"
+>
+  <span className="shrink-0 text-[10px] font-bold leading-5 text-gray-400">
+    {index + 1}.
+  </span>
+
+  <p className="text-xs leading-5 text-gray-400">
+    {instruction}
+  </p>
+</div>
+                  )
+                )}
+
+              </div>
+
+            </section>
+
+
+            
+            <WorkoutActions workout={workout} />
 
           </div>
 

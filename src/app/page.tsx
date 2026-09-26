@@ -6,7 +6,7 @@ const Page = () => {
   return (
     <main>
       <Banner />
-      <WorkoutLibrary />
+     <WorkoutLibrary/>
     </main>
   );
 };
