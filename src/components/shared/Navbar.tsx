@@ -3,12 +3,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import logo from "@/assets/logo.png";
 import { useFitLog } from "@/context/FitLogContext";
 
-const Navbar = () => {
+const NavbarContent = () => {
   const { plan, saved } = useFitLog();
 
   const pathname = usePathname();
@@ -17,7 +18,6 @@ const Navbar = () => {
   const isHome = pathname === "/";
   const isMyPlan = pathname === "/my-plan";
 
-  
   const isSaved =
     pathname === "/my-plan" && searchParams.get("tab") === "saved";
 
@@ -28,9 +28,7 @@ const Navbar = () => {
     <div className="sticky top-0 z-50 border-b border-[#262626] bg-black text-white">
       <div className="navbar mx-auto min-h-[64px] w-full px-4 md:px-6 lg:px-8">
 
-        
         <div className="navbar-start">
-
           <div className="dropdown">
             <div
               tabIndex={0}
@@ -54,7 +52,6 @@ const Navbar = () => {
               </svg>
             </div>
 
-            
             <ul
               tabIndex={-1}
               className="menu menu-sm dropdown-content z-10 mt-3 w-52 rounded-box border border-[#262626] bg-black p-2 shadow"
@@ -94,7 +91,6 @@ const Navbar = () => {
             </ul>
           </div>
 
-          
           <Link href="/" className="flex items-center gap-2">
             <Image
               src={logo}
@@ -109,12 +105,8 @@ const Navbar = () => {
           </Link>
         </div>
 
-        
-
-
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal gap-1 px-1">
-
             <li>
               <Link
                 href="/"
@@ -140,18 +132,10 @@ const Navbar = () => {
                 My Plan
               </Link>
             </li>
-
           </ul>
         </div>
 
-        
-
-
         <div className="navbar-end gap-4 sm:gap-5">
-
-          
-
-
           <Link
             href="/my-plan"
             className={`group flex items-center gap-1.5 text-[10px] font-medium transition-colors duration-200 ${
@@ -173,9 +157,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          
-
-          
           <Link
             href="/my-plan?tab=saved"
             className={`group flex items-center gap-1.5 text-[10px] font-medium transition-colors duration-200 ${
@@ -196,10 +177,17 @@ const Navbar = () => {
               {saved.length}
             </span>
           </Link>
-
         </div>
       </div>
     </div>
+  );
+};
+
+const Navbar = () => {
+  return (
+    <Suspense fallback={null}>
+      <NavbarContent />
+    </Suspense>
   );
 };
 
