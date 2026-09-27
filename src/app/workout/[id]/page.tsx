@@ -1,205 +1,240 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Workout } from "@/types/workout";
 import WorkoutActions from "@/components/workout/WorkoutActions";
 
-interface WorkoutDetailsPageProps {
-  params: Promise<{
-    id: string;
-  }>;
+interface PageProps {
+  params: Promise<{ id: string }>;
 }
 
-const WorkoutDetailsPage = async ({
-  params,
-}: WorkoutDetailsPageProps) => {
+const WorkoutDetailsPage = async ({ params }: PageProps) => {
   const { id } = await params;
 
-  const res = await fetch(
-    "https://api.abcz.workers.dev/api/fitlog",
-    {
-      cache: "no-store",
-    }
+  const response = await fetch(
+    `https://api.abcz.workers.dev/api/fitlog/${id}`,
+    { cache: "no-store" }
   );
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch workouts");
+  if (!response.ok) {
+    notFound();
   }
 
-  const workouts: Workout[] = await res.json();
+  const result = await response.json();
 
-  const workout = workouts.find(
-    (item) => item.id === Number(id)
-  );
+  const workout = result?.data ?? result?.workout ?? result;
 
   if (!workout) {
     notFound();
   }
 
-  const workoutInfo = [
-    {
-      label: "Equipment",
-      value: workout.equipment,
-    },
-    {
-      label: "Difficulty",
-      value: workout.difficulty,
-    },
-    {
-      label: "Sets",
-      value: workout.sets,
-    },
-    {
-      label: "Reps",
-      value: workout.reps,
-    },
-    {
-      label: "Duration",
-      value: `${workout.duration} min`,
-    },
-    {
-      label: "Calories",
-      value: `${workout.caloriesBurned} kcal`,
-    },
-    {
-      label: "Rating",
-      value: `${workout.rating}`,
-      rating: true,
-    },
-  ];
-
   return (
-    <main className="min-h-screen bg-[#0d0f13] text-white">
+    <main className="min-h-screen bg-[#0d0f13] px-4 py-6 text-white sm:px-5 lg:px-6">
+      <div className="w-full">
+        
+
+
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#2a2d34] bg-[#15181f] px-4 py-2 text-xs font-bold uppercase tracking-wide text-gray-300 transition-all duration-200 hover:border-[#C2F800] hover:text-[#C2F800]"
+          >
+            <span className="text-base">←</span>
+            Back to Workouts
+          </Link>
+        </div>
 
       
-      <div className="px-5 pt-6">
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-md border border-[#262626] bg-[#151515] px-4 py-2 text-[10px] font-bold uppercase tracking-wide text-gray-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C2F800] hover:text-[#C2F800]"
-        >
-          ← Back to Home
-        </Link>
-      </div>
 
 
-      
-      <section className="mx-[2px] mt-5 px-4 py-8 md:px-4">
-
-        <div className="grid gap-9 lg:grid-cols-[0.98fr_1fr]">
-
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
           
-         <div className="relative h-[550px] overflow-hidden rounded-2xl md:h-[580px]">
 
-            <Image
-              src={workout.image}
-              alt={workout.name}
-              fill
-              priority
-              className="object-cover"
-            />
 
+
+          <div className="w-full">
+            <div className="relative h-[520px] w-full overflow-hidden rounded-xl border border-[#252830] bg-[#15171c] sm:h-[520px] lg:h-[690px]">
+              <Image
+                src={workout.image}
+                alt={workout.name}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
           </div>
 
-        
-          <div className="flex flex-col">
-
           
-            <h1 className="text-3xl font-black uppercase leading-none tracking-tight md:text-4xl">
+
+
+          <div className="w-full pt-1">
+            <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-5xl">
               {workout.name}
             </h1>
 
-
-            
-            <p className="mt-3 max-w-2xl text-xs leading-5 text-gray-400 md:text-sm">
+            <p className="mt-4 max-w-xl text-sm leading-6 text-gray-400 sm:text-[15px]">
               {workout.description}
             </p>
 
-
             
-            <div className="mt-4 flex flex-wrap gap-2">
 
-              {workout.muscleGroups.map((muscle) => (
+
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {workout.muscleGroups?.map((muscle: string) => (
                 <span
                   key={muscle}
-                  className="rounded-full bg-[#C2F800] px-3 py-1 text-[9px] font-black uppercase text-black"
+                  className="rounded-full bg-[#C2F800] px-3 py-1 text-[11px] font-black uppercase text-black"
                 >
                   {muscle}
                 </span>
               ))}
-
             </div>
 
-
             
-            <div className="mt-5 overflow-hidden rounded-xl border border-[#262626]">
 
-              {workoutInfo.map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  className="group flex w-full items-center justify-between border-b border-[#262626] bg-[#1E2330] px-4 py-3 text-left transition-all duration-300 last:border-b-0 hover:bg-[#252b3a]"
-                >
 
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors duration-300 group-hover:text-[#C2F800]">
-                    {item.label}
+
+            <div className="mt-5 overflow-hidden rounded-xl border border-[#252830] bg-[#15181f]">
+              <div className="divide-y divide-[#252830]">
+                
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Equipment
                   </span>
 
-                  <span
-                    className={`text-[10px] font-medium ${
-                      item.rating
-                        ? "text-[#C2F800]"
-                        : "text-white"
-                    }`}
-                  >
-                    {item.value}
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.equipment}
+                  </span>
+                </div>
+
+                
+
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Difficulty
                   </span>
 
-                </button>
-              ))}
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.difficulty}
+                  </span>
+                </div>
 
+                
+
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Sets
+                  </span>
+
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.sets}
+                  </span>
+                </div>
+
+              
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Reps
+                  </span>
+
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.reps}
+                  </span>
+                </div>
+
+                
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Duration
+                  </span>
+
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.duration} min
+                  </span>
+                </div>
+
+                
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Calories
+                  </span>
+
+                  <span className="text-xs font-semibold text-gray-200 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    {workout.caloriesBurned} kcal
+                  </span>
+                </div>
+
+                
+
+
+
+
+                <div className="group flex cursor-default items-center justify-between px-4 py-3 transition-all duration-200 hover:-translate-y-1 hover:bg-[#1b1f25]">
+                  <span className="text-xs font-medium text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                    Rating
+                  </span>
+
+                  <span className="text-xs font-semibold text-[#C2F800] transition-colors duration-200 group-hover:text-white">
+                    ★ {workout.rating}
+                  </span>
+                </div>
+              </div>
             </div>
 
-
             
-            <section className="mt-5">
 
-              <h2 className="text-sm font-black uppercase tracking-wide">
-                Instructions
-              </h2>
+            <div className="mt-6">
+              <div className="mb-4 flex items-center gap-3">
+                <h2 className="text-lg font-black uppercase tracking-wide">
+                  Instructions
+                </h2>
 
-              <div className="mt-3 space-y-2.5">
-
-                {workout.instructions.map(
-                  (instruction, index) => (
-                   <div
-  key={index}
-  className="flex items-start gap-3"
->
-  <span className="shrink-0 text-[10px] font-bold leading-5 text-gray-400">
-    {index + 1}.
-  </span>
-
-  <p className="text-xs leading-5 text-gray-400">
-    {instruction}
-  </p>
-</div>
-                  )
-                )}
-
+                <div className="h-px flex-1 bg-[#252830]" />
               </div>
 
-            </section>
+              <ol className="space-y-2.5">
+                {workout.instructions?.map(
+                  (instruction: string, index: number) => (
+                    <li
+                      key={`${index}-${instruction}`}
+                      className="group flex cursor-default gap-3 rounded-lg px-2 py-2 transition-all duration-200 hover:-translate-y-1 hover:bg-[#15181f]"
+                    >
+                      <span className="mt-0.5 text-[11px] font-bold text-gray-500 transition-colors duration-200 group-hover:text-[#C2F800]">
+                        {index + 1}.
+                      </span>
 
+                      <span className="text-xs leading-5 text-gray-400 transition-colors duration-200 group-hover:text-white">
+                        {instruction}
+                      </span>
+                    </li>
+                  )
+                )}
+              </ol>
+            </div>
 
-            
+          
             <WorkoutActions workout={workout} />
-
           </div>
-
         </div>
-
-      </section>
-
+      </div>
     </main>
   );
 };

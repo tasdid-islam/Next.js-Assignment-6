@@ -4,19 +4,7 @@ import { useEffect, useState } from "react";
 import { Workout } from "@/types/workout";
 import WorkoutCard from "./WorkoutCard";
 
-const fetchWorkout = async (): Promise<Workout[]> => {
-  const res = await fetch(
-    "https://api.abcz.workers.dev/api/fitlog"
-  );
-
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`);
-  }
-
-  const data: Workout[] = await res.json();
-
-  return data;
-};
+const API_URL = "https://api.api-store.workers.dev/api/fitlog";
 
 const WorkoutLibrary = () => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -26,12 +14,27 @@ const WorkoutLibrary = () => {
   useEffect(() => {
     const getWorkouts = async () => {
       try {
-        const data = await fetchWorkout();
+        setLoading(true);
+        setError("");
 
-        setWorkouts(data);
-      } catch (error) {
-        console.error(error);
-        setError("Failed to load workouts.");
+        const res = await fetch(API_URL);
+
+        if (!res.ok) {
+          throw new Error(`API Error: ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        const workoutList = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.workouts)
+            ? data.workouts
+            : [];
+
+        setWorkouts(workoutList);
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        setError("Unable to load workouts. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -44,14 +47,11 @@ const WorkoutLibrary = () => {
     return (
       <section
         id="library"
-        className="flex min-h-[300px] items-center justify-center px-6 py-16"
+        className="flex min-h-[400px] items-center justify-center px-6 py-16"
       >
-        <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 animate-spin rounded-full border-4 border-[#262626] border-t-[#C2F800]" />
-
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400">
-            Loading workouts...
-          </p>
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#262626] border-t-[#C2F800]" />
+          <p className="text-lg text-gray-400">Loading workouts...</p>
         </div>
       </section>
     );
@@ -59,10 +59,21 @@ const WorkoutLibrary = () => {
 
   if (error) {
     return (
-      <section id="library" className="px-6 py-10">
-        <p className="text-center text-red-500">
-          {error}
-        </p>
+      <section
+        id="library"
+        className="flex min-h-[400px] items-center justify-center px-6 py-16"
+      >
+        <div className="text-center">
+          <p className="mb-4 text-lg text-red-400">{error}</p>
+
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="rounded-lg bg-[#C2F800] px-5 py-3 font-semibold text-black transition hover:bg-[#d0ff22]"
+          >
+            TRY AGAIN
+          </button>
+        </div>
       </section>
     );
   }
@@ -82,10 +93,7 @@ const WorkoutLibrary = () => {
 
         <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workouts.map((workout) => (
-            <WorkoutCard
-              key={workout.id}
-              workout={workout}
-            />
+            <WorkoutCard key={workout.id} workout={workout} />
           ))}
         </div>
       </div>

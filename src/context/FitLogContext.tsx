@@ -1,67 +1,170 @@
-
 "use client";
 
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
 } from "react";
-import { Workout } from "@/types/workout";
+
+export interface Workout {
+  id: number;
+  name: string;
+  image: string;
+  description: string;
+  muscleGroups: string[];
+  equipment: string;
+  difficulty: string;
+  sets: number;
+  reps: string;
+  duration: number;
+  caloriesBurned: number;
+  rating: number;
+  instructions: string[];
+}
 
 interface FitLogContextType {
   plan: Workout[];
   saved: Workout[];
-  addToPlan: (workout: Workout) => void;
-  saveForLater: (workout: Workout) => void;
+  completed: number[];
+
+  addToPlan: (workout: Workout) => boolean;
   removeFromPlan: (id: number) => void;
+
+  saveWorkout: (workout: Workout) => boolean;
   removeFromSaved: (id: number) => void;
+
+  markAsDone: (id: number) => void;
+  isCompleted: (id: number) => boolean;
 }
 
 const FitLogContext = createContext<FitLogContextType | undefined>(
   undefined
 );
 
-interface FitLogProviderProps {
-  children: ReactNode;
-}
-
 export const FitLogProvider = ({
   children,
-}: FitLogProviderProps) => {
+}: {
+  children: ReactNode;
+}) => {
   const [plan, setPlan] = useState<Workout[]>([]);
   const [saved, setSaved] = useState<Workout[]>([]);
+  const [completed, setCompleted] = useState<number[]>([]);
+
+  const [loaded, setLoaded] = useState(false);
+
+  
+
+
+  useEffect(() => {
+    try {
+      const storedPlan = localStorage.getItem("fitlog-plan");
+      const storedSaved = localStorage.getItem("fitlog-saved");
+      const storedCompleted = localStorage.getItem("fitlog-completed");
+
+      if (storedPlan) {
+        setPlan(JSON.parse(storedPlan));
+      }
+
+      if (storedSaved) {
+        setSaved(JSON.parse(storedSaved));
+      }
+
+      if (storedCompleted) {
+        setCompleted(JSON.parse(storedCompleted));
+      }
+    } catch (error) {
+      console.error("Failed to load FitLog data:", error);
+    } finally {
+      setLoaded(true);
+    }
+  }, []);
+
+  
+
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
+  }, [plan, loaded]);
+
+  
+  useEffect(() => {
+    if (!loaded) return;
+
+    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
+  }, [saved, loaded]);
+
+  
+  useEffect(() => {
+    if (!loaded) return;
+
+    localStorage.setItem(
+      "fitlog-completed",
+      JSON.stringify(completed)
+    );
+  }, [completed, loaded]);
+
+  
 
   const addToPlan = (workout: Workout) => {
-    setPlan((prev) => {
-      if (prev.some((item) => item.id === workout.id)) {
-        return prev;
-      }
+    if (plan.some((item) => item.id === workout.id)) {
+      return false;
+    }
 
-      if (prev.length >= 5) {
-        return prev;
-      }
+    if (plan.length >= 5) {
+      return false;
+    }
 
-      return [...prev, workout];
-    });
+    setPlan((prev) => [...prev, workout]);
+
+    return true;
   };
 
-  const saveForLater = (workout: Workout) => {
-    setSaved((prev) => {
-      if (prev.some((item) => item.id === workout.id)) {
-        return prev;
-      }
+  
 
-      return [...prev, workout];
-    });
-  };
 
   const removeFromPlan = (id: number) => {
-    setPlan((prev) => prev.filter((item) => item.id !== id));
+    setPlan((prev) => prev.filter((workout) => workout.id !== id));
+
+    setCompleted((prev) => prev.filter((item) => item !== id));
   };
 
+
+
+
+  const saveWorkout = (workout: Workout) => {
+    if (saved.some((item) => item.id === workout.id)) {
+      return false;
+    }
+
+    setSaved((prev) => [...prev, workout]);
+
+    return true;
+  };
+
+  
+
   const removeFromSaved = (id: number) => {
-    setSaved((prev) => prev.filter((item) => item.id !== id));
+    setSaved((prev) => prev.filter((workout) => workout.id !== id));
+  };
+
+  
+  
+  const markAsDone = (id: number) => {
+    setCompleted((prev) => {
+      if (prev.includes(id)) {
+        return prev;
+      }
+
+      return [...prev, id];
+    });
+  };
+
+  const isCompleted = (id: number) => {
+    return completed.includes(id);
   };
 
   return (
@@ -69,10 +172,13 @@ export const FitLogProvider = ({
       value={{
         plan,
         saved,
+        completed,
         addToPlan,
-        saveForLater,
         removeFromPlan,
+        saveWorkout,
         removeFromSaved,
+        markAsDone,
+        isCompleted,
       }}
     >
       {children}
@@ -91,4 +197,3 @@ export const useFitLog = () => {
 
   return context;
 };
-
